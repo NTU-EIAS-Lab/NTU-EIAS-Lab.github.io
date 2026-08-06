@@ -1,0 +1,50 @@
+{
+  "intro": "",
+  "groups": [
+    {
+      "label": "PI",
+      "members": [
+        {
+          "name": "Prof. Siew Kei Lam",
+          "role": "Faculty Advisor",
+          "focus": "Custom Computing, Embedded Vision, Edge AI",
+          "photo": "assets/people/siew-kei-lam.jpg",
+          "link": "https://siewkeilam.github.io/ei-research-group/index.html"
+        }
+      ]
+    },
+    {
+      "label": "PhD Students",
+      "members": [
+        {
+          "name": "Edward Tan",
+          "role": "PhD Student",
+          "focus": "Spatial AI; SLAM, Navigation, 3D Reconstruction",
+          "photo": "assets/people/edward-tan.jpg",
+          "link": "https://edward62740.github.io"
+        },
+        {
+          "name": "Miyuru Thathsara",
+          "role": "PhD Candidate",
+          "focus": "Visual Localization, FPGA Acceleration",
+          "photo": "assets/people/miyuru-thathsara.jpg",
+          "link": "https://scholar.google.com/citations?user=_F2z9wYAAAAJ&hl=en"
+        },
+        {
+          "name": "Pasan Mendis",
+          "role": "PhD Student",
+          "focus": "Neuromorphic Computing, Spiking Neural Networks",
+          "photo": "assets/people/pasan.jpg",
+          "link": "#"
+        },
+        {
+          "name": "Thuva Sooriya",
+          "role": "PhD Student",
+          "focus": "",
+          "photo": "assets/people/thuva-sooriya.jpg",
+          "link": "https://www.thuvasooriya.me/"
+        }
+      ]
+    }
+  ]
+}

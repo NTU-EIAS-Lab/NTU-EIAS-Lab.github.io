@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./support.js"></script>
+</head>
+
+<body>
+  <x-dc>
+    <helmet>
+      <title>Edge Intelligence for Autonomous Systems Lab</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+      <style>
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          background: #f7f7f5;
+          color: #1c2126;
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        ::selection {
+          background: oklch(0.55 0.09 215 / 0.18);
+        }
+
+        a {
+          color: oklch(0.45 0.10 215);
+        }
+
+        a:hover {
+          color: oklch(0.35 0.10 215);
+        }
+
+        /* The single application address, as a mailto chip. */
+        .join-email {
+          transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .join-email:hover,
+        .join-email:focus-visible {
+          border-color: oklch(0.45 0.10 215) !important;
+          background: oklch(0.45 0.10 215 / 0.10) !important;
+        }
+
+        /* Opening cards. Closed roles keep their place in the list but read as
+           inactive: dimmed, and inert on hover. */
+        .opening {
+          position: relative;
+          transition: border-color 0.25s, box-shadow 0.25s, opacity 0.25s;
+        }
+
+        .opening:hover,
+        .opening:focus-within {
+          border-color: #1c2126;
+          box-shadow: 3px 3px 0 rgba(28, 40, 50, 0.12);
+          /* Lift the whole card so its popup covers the cards below it. */
+          z-index: 5;
+        }
+
+        .opening:focus-visible {
+          outline: none;
+        }
+
+        /* Dim the card's own content rather than the card, so the popup that
+           hangs off a closed role stays fully legible. */
+        .opening-closed {
+          border-color: rgba(28, 40, 50, 0.07);
+        }
+
+        .opening-closed > div:not(.opening-more) {
+          opacity: 0.5;
+        }
+
+        .opening-closed:hover,
+        .opening-closed:focus-within {
+          border-color: rgba(28, 40, 50, 0.07);
+          box-shadow: none;
+        }
+
+        /* The blurb about a role. With no hover available (touch), it just reads
+           as an extra paragraph in the card. Where hover works it becomes a
+           message-style popup below the card, with a tail pointing back at it. */
+        .opening-more {
+          margin-top: 11px;
+          padding-top: 11px;
+          border-top: 1px solid rgba(28, 40, 50, 0.1);
+        }
+
+        .opening-more-label {
+          display: block;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #8a929a;
+          margin-bottom: 7px;
+        }
+
+        .opening-more-text {
+          display: block;
+          font-size: 0.83rem;
+          line-height: 1.6;
+          color: #5a636c;
+        }
+
+        @media (hover: hover) {
+          .opening-more {
+            position: absolute;
+            top: 100%;
+            left: -1px;
+            right: -1px;
+            margin: 0;
+            border: 0;
+            z-index: 10;
+            /* Transparent strip bridging card and popup, so the pointer can
+               travel into the popup without the hover dropping. */
+            padding-top: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-5px);
+            transition: opacity 0.2s, transform 0.2s;
+          }
+
+          .opening-more-box {
+            position: relative;
+            z-index: 0;
+            background: #ffffff;
+            border: 1px solid #1c2126;
+            box-shadow: 4px 4px 0 rgba(28, 40, 50, 0.14);
+            padding: 14px 16px;
+            max-height: min(220px, 40vh);
+            overflow-y: auto;
+            /* Keep the wheel inside the popup instead of scrolling the page. */
+            overscroll-behavior: contain;
+          }
+
+          /* Tail. Sits on the wrapper, not the box, so it is not clipped or
+             scrolled away by the box's own overflow. */
+          .opening-more::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 22px;
+            z-index: 1;
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            border-left: 1px solid #1c2126;
+            border-top: 1px solid #1c2126;
+            transform: rotate(45deg);
+          }
+
+          .opening:hover .opening-more,
+          .opening:focus-within .opening-more {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .opening,
+          .opening-more {
+            transition: none;
+          }
+        }
+
+        @keyframes pulse-dot {
+          0% {
+            box-shadow: 0 0 0 0 oklch(0.62 0.14 150 / 0.5);
+          }
+
+          70% {
+            box-shadow: 0 0 0 7px oklch(0.62 0.14 150 / 0);
+          }
+
+          100% {
+            box-shadow: 0 0 0 0 oklch(0.62 0.14 150 / 0);
+          }
+        }
+      </style>
+    </helmet>
+    <div id="page-scroll"
+      style="height:100dvh; overflow-y:auto; overflow-x:hidden; background:#f7f7f5; color:#1c2126; font-family:'Inter',system-ui,sans-serif;">
+
+      <header data-screen-label="Masthead"
+        style="position:sticky; top:0; z-index:1000; background:rgba(247,247,245,0.9); backdrop-filter:blur(12px); border-bottom:1px solid rgba(28,40,50,0.12);">
+        <div
+          style="position:absolute; left:0; bottom:-1px; height:2px; width: {{ progressW }}; background:oklch(0.45 0.10 215); transition:width 0.15s linear;">
+        </div>
+        <div
+          style="max-width:1080px; margin:0 auto; padding:0 clamp(16px, 4vw, 32px); height:60px; display:flex; align-items:center; gap:16px;">
+          <a href="#" onClick="{{ goTop }}"
+            style="display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; min-width:0;">
+            <span
+              style="width:26px; height:26px; flex-shrink:0; border:1.5px solid #1c2126; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:0.6rem; color:#1c2126;">EIAS</span>
+            <span
+              style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:0.95rem; letter-spacing:-0.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{
+              groupName }}</span>
+          </a>
+          <sc-if value="{{ notMobile }}" hint-placeholder-val="{{ true }}">
+            <nav style="margin-left:auto; display:flex; align-items:center; gap:4px;">
+              <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+                <a href="#" onClick="{{ item.go }}"
+                  style="display:flex; align-items:baseline; text-decoration:none; padding:7px 11px; font-size:0.84rem; font-weight:500; color: {{ item.color }}; border-bottom:2px solid {{ item.underline }}; transition:color 0.2s, border-color 0.2s;"
+                  style-hover="color:#1c2126;">{{ item.label }}</a>
+              </sc-for>
+            </nav>
+          </sc-if>
+          <sc-if value="{{ isMobile }}">
+            <button onClick="{{ toggleMenu }}" aria-label="Menu"
+              style="margin-left:auto; background:none; border:1px solid rgba(28,40,50,0.15); border-radius:6px; padding:8px 10px; cursor:pointer; color:#1c2126; display:flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;">
+              {{ menuLabel }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ menuOpen }}">
+          <nav data-screen-label="Mobile menu"
+            style="border-top:1px solid rgba(28,40,50,0.1); background:#f7f7f5; padding:8px clamp(16px, 4vw, 32px) 14px; display:flex; flex-direction:column;">
+            <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+              <a href="#" onClick="{{ item.go }}"
+                style="display:flex; align-items:baseline; text-decoration:none; padding:12px 4px; font-size:1rem; font-weight:500; color: {{ item.color }}; border-bottom:1px solid rgba(28,40,50,0.07);">{{
+                item.label }}</a>
+            </sc-for>
+          </nav>
+        </sc-if>
+      </header>
+
+      <div style="max-width:1080px; margin:0 auto; padding:0 clamp(16px, 4vw, 32px);">
+
+        <section id="sec-overview" data-screen-label="Overview"
+          style="padding:clamp(48px, 8vh, 96px) 0 clamp(40px, 6vh, 72px); border-bottom:1px solid rgba(28,40,50,0.12); background-image:radial-gradient(circle, rgba(28,40,50,0.07) 1px, transparent 1px); background-size:24px 24px; position:relative; overflow:hidden;">
+          <canvas id="slam-canvas"
+            style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0.55;"></canvas>
+          <div style="position:relative;">
+            <sc-if value="{{ hasParent }}">
+              <a href="{{ parentUrl }}"
+                style="display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:0.64rem; letter-spacing:0.12em; text-transform:uppercase; color:#5a636c; text-decoration:none; margin-bottom:16px;"
+                style-hover="color:oklch(0.42 0.10 215);"><span style="color:oklch(0.45 0.10 215);">↳</span>Part of {{
+                parentName }}</a>
+            </sc-if>
+            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:22px;">
+              <span
+                style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; color:oklch(0.45 0.10 215);">{{
+                tagline }}</span>
+              <sc-if value="{{ recruiting }}">
+                <a href="#" onClick="{{ goJoin }}"
+                  style="display:inline-flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.42 0.10 215); text-decoration:none; border:1px solid oklch(0.45 0.10 215 / 0.4); background:#ffffff; padding:5px 12px;"
+                  style-hover="background:oklch(0.45 0.10 215 / 0.07);"><span
+                    style="width:6px; height:6px; border-radius:50%; background:oklch(0.62 0.14 150); animation:pulse-dot 2.2s ease-out infinite;"></span>Open
+                  positions →</a>
+              </sc-if>
+            </div>
+            <h1
+              style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2.1rem, 6vw, 3.6rem); font-weight:700; letter-spacing:-0.03em; line-height:1.05; margin:0 0 22px; max-width:16ch;">
+              {{ groupName }}</h1>
+            <div style="font-size:clamp(0.95rem, 1.4vw, 1.05rem); line-height:1.7; color:#39424b; max-width:62ch;">
+              <sc-for list="{{ description }}" as="para" hint-placeholder-count="2">
+                <!-- Segments stay on one line: a newline between inline nodes would render as a stray space. -->
+                <p style="margin: {{ para.margin }};"><sc-for list="{{ para.parts }}" as="part" hint-placeholder-count="1"><sc-if value="{{ part.url }}"><a href="{{ part.url }}" style="text-decoration:none; border-bottom:1px solid oklch(0.45 0.10 215 / 0.35);">{{ part.text }}</a></sc-if><sc-if value="{{ !part.url }}"><span>{{ part.text }}</span></sc-if></sc-for></p>
+              </sc-for>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:26px;">
+              <sc-for list="{{ heroTags }}" as="t" hint-placeholder-count="4">
+                <span
+                  style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; letter-spacing:0.04em; padding:5px 12px; background:#ffffff; border:1px solid rgba(28,40,50,0.14); color:#5a636c;">{{
+                  t }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:26px;">
+              <sc-for list="{{ socials }}" as="s" hint-placeholder-count="4">
+                <a href="{{ s.url }}"
+                  style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:#5a636c; text-decoration:none; border-bottom:1px solid rgba(28,40,50,0.2); padding-bottom:2px; transition:color 0.2s, border-color 0.2s;"
+                  style-hover="color:oklch(0.42 0.10 215); border-color:oklch(0.45 0.10 215 / 0.6);">{{ s.label }} ↗</a>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section id="sec-news" data-screen-label="News"
+          style="padding:clamp(36px, 6vh, 64px) 0; border-bottom:1px solid rgba(28,40,50,0.12); opacity: {{ revNews.o }}; transform: translateY({{ revNews.y }}); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);">
+          <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:24px;">
+            <h2
+              style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.3rem, 2.4vw, 1.7rem); font-weight:600; letter-spacing:-0.02em; margin:0;">
+              News</h2>
+            <span style="flex:1; height:1px; background:rgba(28,40,50,0.1);"></span>
+          </div>
+          <div style="display:flex; flex-direction:column;">
+            <sc-for list="{{ news }}" as="n" hint-placeholder-count="4">
+              <div
+                style="display:grid; grid-template-columns: {{ rowCols }}; gap: {{ rowGap }}; padding:14px 4px; border-bottom:1px solid rgba(28,40,50,0.07); transition:background 0.2s;"
+                style-hover="background:rgba(28,40,50,0.02);">
+                <span
+                  style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#8a929a; padding-top:3px; white-space:nowrap;">{{
+                  n.date }}</span>
+                <span style="font-size:0.93rem; line-height:1.6; color:#2b333b;">{{ n.content }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section id="sec-people" data-screen-label="People"
+          style="padding:clamp(36px, 6vh, 64px) 0; border-bottom:1px solid rgba(28,40,50,0.12); opacity: {{ revPeople.o }}; transform: translateY({{ revPeople.y }}); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);">
+          <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:10px;">
+            <h2
+              style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.3rem, 2.4vw, 1.7rem); font-weight:600; letter-spacing:-0.02em; margin:0;">
+              People</h2>
+            <span style="flex:1; height:1px; background:rgba(28,40,50,0.1);"></span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#8a929a;">{{ peopleCount
+              }}</span>
+          </div>
+          <sc-if value="{{ peopleIntro }}">
+            <p style="color:#5a636c; max-width:60ch; margin:0 0 8px; font-size:0.9rem; line-height:1.6;">{{ peopleIntro
+              }}</p>
+          </sc-if>
+          <sc-for list="{{ peopleGroups }}" as="g" hint-placeholder-count="3">
+            <h3
+              style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:#8a929a; margin:2.2rem 0 0.9rem;">
+              {{ g.label }}</h3>
+            <div
+              style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap:12px;">
+              <sc-for list="{{ g.members }}" as="m" hint-placeholder-count="2">
+                <a href="{{ m.link }}"
+                  style="display:flex; gap:13px; align-items:center; background:#ffffff; border:1px solid rgba(28,40,50,0.12); padding:14px 15px; text-decoration:none; color:inherit; transition:border-color 0.25s, box-shadow 0.25s;"
+                  style-hover="border-color:#1c2126; box-shadow:3px 3px 0 rgba(28,40,50,0.12);">
+                  <sc-if value="{{ m.photo }}">
+                    <img src="{{ m.photo }}" alt="{{ m.name }}" loading="lazy"
+                      style="width:46px; height:46px; flex-shrink:0; object-fit:cover; object-position:center top; display:block; background:#eef0f0; border:1px solid rgba(28,40,50,0.12);">
+                  </sc-if>
+                  <sc-if value="{{ !m.photo }}">
+                    <span
+                      style="width:46px; height:46px; flex-shrink:0; background:#eef0f0; border:1px solid rgba(28,40,50,0.12); display:flex; align-items:flex-end; justify-content:center; overflow:hidden; color:rgba(28,40,50,0.25);">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        style="width:100%; height:100%; display:block;">
+                        <circle cx="12" cy="8.6" r="4.1"></circle>
+                        <path d="M12 14.6c-4.5 0-8.1 3-8.1 6.7V24h16.2v-2.7c0-3.7-3.6-6.7-8.1-6.7Z"></path>
+                      </svg>
+                    </span>
+                  </sc-if>
+                  <span style="min-width:0;">
+                    <span style="display:block; font-size:0.92rem; font-weight:600; letter-spacing:-0.01em;">{{ m.name
+                      }}</span>
+                    <span
+                      style="display:block; font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.45 0.10 215); margin:3px 0;">{{
+                      m.role }}</span>
+                    <span style="display:block; font-size:0.77rem; color:#5a636c; line-height:1.45;">{{ m.focus
+                      }}</span>
+                  </span>
+                </a>
+              </sc-for>
+            </div>
+          </sc-for>
+        </section>
+
+        <section id="sec-research" data-screen-label="Research"
+          style="padding:clamp(36px, 6vh, 64px) 0; border-bottom:1px solid rgba(28,40,50,0.12); opacity: {{ revResearch.o }}; transform: translateY({{ revResearch.y }}); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);">
+          <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:10px;">
+            <h2
+              style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.3rem, 2.4vw, 1.7rem); font-weight:600; letter-spacing:-0.02em; margin:0;">
+              Research</h2>
+            <span style="flex:1; height:1px; background:rgba(28,40,50,0.1);"></span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#8a929a;">{{ projCountLabel
+              }}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:16px 0 22px;">
+            <div style="flex:1; min-width:min(220px, 100%); position:relative;">
+              <svg
+                style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:14px; height:14px; opacity:0.45;"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" placeholder="Search research…" value="{{ projQuery }}" onChange="{{ onProjSearch }}"
+                style="width:100%; box-sizing:border-box; padding:10px 14px 10px 36px; background:#ffffff; border:1px solid rgba(28,40,50,0.15); color:#1c2126; font-family:inherit; font-size:0.9rem; outline:none;"
+                style-focus="border-color:#1c2126; box-shadow:3px 3px 0 rgba(28,40,50,0.1);">
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap:14px;">
+            <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+              <a href="{{ p.link }}"
+                style="display:flex; flex-direction:column; background:#ffffff; border:1px solid rgba(28,40,50,0.12); text-decoration:none; color:inherit; transition:border-color 0.25s, box-shadow 0.25s;"
+                style-hover="border-color:#1c2126; box-shadow:4px 4px 0 rgba(28,40,50,0.12);">
+                <div
+                  style="position:relative; aspect-ratio:16/9; border-bottom:1px solid rgba(28,40,50,0.1); background:#eef0f0; overflow:hidden;">
+                  <sc-if value="{{ p.isImage }}">
+                    <img src="{{ p.media }}" alt="{{ p.title }}" loading="lazy"
+                      style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                  </sc-if>
+                  <sc-if value="{{ p.isVideo }}">
+                    <video src="{{ p.media }}" poster="{{ p.poster }}" preload="metadata" muted="{{ true }}"
+                      loop="{{ true }}" sc-camel-auto-play="{{ p.autoPlay }}" sc-camel-plays-inline="{{ true }}"
+                      style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
+                  </sc-if>
+                  <sc-if value="{{ !p.media }}">
+                    <span
+                      style="position:absolute; inset:0; background:repeating-linear-gradient(45deg, rgba(28,40,50,0.04) 0 8px, transparent 8px 16px), #eef0f0; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:#8a929a;">project
+                      figure</span>
+                  </sc-if>
+                  <span
+                    style="position:absolute; top:9px; left:9px; z-index:1; font-family:'JetBrains Mono',monospace; font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color: {{ p.statusColor }}; background:#ffffff; border:1px solid rgba(28,40,50,0.15); padding:3px 8px;">{{
+                    p.status }}</span>
+                </div>
+                <div style="padding:15px 16px 16px; display:flex; flex-direction:column; gap:8px; flex:1;">
+                  <div
+                    style="font-family:'Space Grotesk',sans-serif; font-size:0.98rem; font-weight:600; letter-spacing:-0.01em;">
+                    {{ p.title }}</div>
+                  <div style="font-size:0.82rem; color:#5a636c; line-height:1.55; flex:1;">{{ p.description }}</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    <sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="2">
+                      <span
+                        style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.04em; padding:3px 8px; border:1px solid rgba(28,40,50,0.12); color:#5a636c;">{{
+                        t }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+              </a>
+            </sc-for>
+          </div>
+        </section>
+
+        <section id="sec-publications" data-screen-label="Publications"
+          style="padding:clamp(36px, 6vh, 64px) 0; border-bottom:1px solid rgba(28,40,50,0.12); opacity: {{ revPubs.o }}; transform: translateY({{ revPubs.y }}); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);">
+          <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:10px;">
+            <h2
+              style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.3rem, 2.4vw, 1.7rem); font-weight:600; letter-spacing:-0.02em; margin:0;">
+              Publications</h2>
+            <span style="flex:1; height:1px; background:rgba(28,40,50,0.1);"></span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#8a929a;">{{ pubCountLabel
+              }}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:16px 0 8px;">
+            <div style="flex:1; min-width:min(220px, 100%); position:relative;">
+              <svg
+                style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:14px; height:14px; opacity:0.45;"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="pub-search-input" type="text" placeholder="Search publications… (press / to focus)"
+                value="{{ pubQuery }}" onChange="{{ onPubSearch }}"
+                style="width:100%; box-sizing:border-box; padding:10px 14px 10px 36px; background:#ffffff; border:1px solid rgba(28,40,50,0.15); color:#1c2126; font-family:inherit; font-size:0.9rem; outline:none;"
+                style-focus="border-color:#1c2126; box-shadow:3px 3px 0 rgba(28,40,50,0.1);">
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column;">
+            <sc-for list="{{ pubs }}" as="p" hint-placeholder-count="5">
+              <div
+                style="display:grid; grid-template-columns: {{ pubCols }}; gap: {{ rowGap }}; padding:18px 4px; border-bottom:1px solid rgba(28,40,50,0.07); transition:background 0.2s;"
+                style-hover="background:rgba(28,40,50,0.02);">
+                <span
+                  style="font-family:'JetBrains Mono',monospace; font-size:0.76rem; font-weight:500; color:oklch(0.45 0.10 215); padding-top:2px;">{{
+                  p.ref }}</span>
+                <span style="min-width:0;">
+                  <span
+                    style="display:block; font-size:0.96rem; font-weight:550; line-height:1.45; letter-spacing:-0.005em; margin-bottom:5px;">
+                    <sc-if value="{{ p.hasUrl }}" hint-placeholder-val="{{ true }}">
+                      <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer"
+                        style="color:inherit; text-decoration:none; transition:color 0.2s;"
+                        style-hover="color:oklch(0.42 0.10 215);">{{ p.title }}<svg
+                          xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+                          aria-hidden="true" style="margin-left:6px; vertical-align:0; opacity:0.55; flex-shrink:0;">
+                          <path d="M14 4h6v6"></path>
+                          <path d="M20 4 11 13"></path>
+                          <path d="M18 14v5a1.6 1.6 0 0 1-1.6 1.6H5A1.6 1.6 0 0 1 3.4 19V7.6A1.6 1.6 0 0 1 5 6h5">
+                          </path>
+                        </svg></a>
+                    </sc-if>
+                    <sc-if value="{{ !p.hasUrl }}">
+                      <span>{{ p.title }}</span>
+                    </sc-if>
+                  </span>
+                  <span style="display:block; font-size:0.8rem; color:#5a636c; line-height:1.55;">{{ p.authors }} ·
+                    <em>{{ p.venue }}</em>, {{ p.year }} <span
+                      style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:#8a929a; border:1px solid rgba(28,40,50,0.12); padding:1px 6px; margin-left:6px;">{{
+                      p.type }}</span></span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section id="sec-join" data-screen-label="Join us"
+          style="padding:clamp(36px, 6vh, 64px) 0; opacity: {{ revJoin.o }}; transform: translateY({{ revJoin.y }}); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);">
+          <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:10px;">
+            <h2
+              style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.3rem, 2.4vw, 1.7rem); font-weight:600; letter-spacing:-0.02em; margin:0;">
+              Join us</h2>
+            <span style="flex:1; height:1px; background:rgba(28,40,50,0.1);"></span>
+          </div>
+          <p style="color:#5a636c; max-width:62ch; margin:0 0 24px; font-size:0.92rem; line-height:1.65;">{{ joinIntro
+            }}</p>
+          <div
+            style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap:12px; margin-bottom:28px;">
+            <sc-for list="{{ openings }}" as="o" hint-placeholder-count="3">
+              <div class="{{ o.cls }}" tabindex="0"
+                style="background:#ffffff; border:1px solid rgba(28,40,50,0.12); padding:17px 18px;">
+                <div
+                  style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:7px;">
+                  <span
+                    style="font-family:'Space Grotesk',sans-serif; font-size:0.96rem; font-weight:600; letter-spacing:-0.01em;">{{
+                    o.role }}</span>
+                  <span
+                    style="font-family:'JetBrains Mono',monospace; font-size:0.6rem; letter-spacing:0.06em; text-transform:uppercase; color: {{ o.whenColor }};">{{
+                    o.when }}</span>
+                </div>
+                <div style="font-size:0.83rem; color:#5a636c; line-height:1.6;">{{ o.details }}</div>
+                <div class="opening-more">
+                  <div class="opening-more-box" tabindex="0">
+                    <span class="opening-more-label">{{ o.role }}</span>
+                    <span class="opening-more-text">{{ o.about }}</span>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#ffffff; border:1px solid rgba(28,40,50,0.12); padding:20px 22px;">
+            <div
+              style="font-family:'JetBrains Mono',monospace; font-size:0.64rem; letter-spacing:0.16em; text-transform:uppercase; color:#8a929a; margin-bottom:10px;">
+              How to apply</div>
+            <p style="margin:0 0 10px; font-size:0.9rem; color:#2b333b; line-height:1.65;">{{ howToApply }}</p>
+            <p style="margin:0 0 16px; font-size:0.82rem; color:#5a636c; line-height:1.6;">{{ joinNote }}</p>
+            <sc-if value="{{ hasEmail }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px;">
+                <a class="join-email" href="{{ mailtoUrl }}"
+                  style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:oklch(0.42 0.10 215); border:1px solid oklch(0.45 0.10 215 / 0.35); background:oklch(0.45 0.10 215 / 0.04); padding:9px 13px; word-break:break-all; text-decoration:none;">
+                  {{ contactEmail }}</a>
+                <span
+                  style="font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:#8a929a;">Subject:
+                  {{ applySubject }}</span>
+              </div>
+            </sc-if>
+          </div>
+        </section>
+
+        <footer
+          style="border-top:1px solid rgba(28,40,50,0.12); padding:26px 0 40px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <span
+            style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:#8a929a;">©
+            2026 {{ groupName }}</span>
+          <sc-if value="{{ hasParent }}">
+            <span
+              style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.08em; color:#8a929a;">Part
+              of {{ parentName }}</span>
+          </sc-if>
+          <span
+            style="display:flex; align-items:flex-start; gap:7px; font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.06em; line-height:1.55; color:#8a929a;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+              style="flex-shrink:0; margin-top:2px;">
+              <path d="M20 10.2c0 5.6-8 11.8-8 11.8s-8-6.2-8-11.8a8 8 0 0 1 16 0Z"></path>
+              <circle cx="12" cy="10" r="2.8"></circle>
+            </svg>
+            <span>
+              <sc-for list="{{ address }}" as="line" hint-placeholder-count="5">
+                <span style="display:block;">{{ line }}</span>
+              </sc-for>
+            </span>
+          </span>
+          <sc-if value="{{ hasInternal }}" hint-placeholder-val="{{ true }}">
+            <a href="{{ internalUrl }}"
+              style="display:inline-flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.42 0.10 215); text-decoration:none; border:1px solid oklch(0.45 0.10 215 / 0.4); background:#ffffff; padding:7px 13px; transition:background 0.2s, border-color 0.2s;"
+              style-hover="background:oklch(0.45 0.10 215 / 0.07); border-color:oklch(0.45 0.10 215 / 0.7);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <rect x="4" y="11" width="16" height="10" rx="1.5"></rect>
+                <path d="M8 11V7.5a4 4 0 0 1 8 0V11"></path>
+              </svg>{{ internalLabel }} →</a>
+          </sc-if>
+        </footer>
+      </div>
+    </div>
+  </x-dc>
+  <script type="text/x-dc" data-dc-script data-props="{
+  &quot;recruitingBadge&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Content&quot;},
+  &quot;showAlumni&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Content&quot;},
+  &quot;newsLimit&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 5, &quot;min&quot;: 1, &quot;max&quot;: 12, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Content&quot;}
+}">
+class Component extends DCLogic {
+  state = { active: 'overview', isMobile: false, menu: false, data: null, pubQuery: '', projQuery: '', revealed: {}, progress: 0 };
+
+  componentDidMount() {
+    this._mq = window.matchMedia('(max-width: 820px)');
+    this._onMq = () => this.setState({ isMobile: this._mq.matches, menu: false });
+    if (this._mq.addEventListener) this._mq.addEventListener('change', this._onMq);
+    this.setState({ isMobile: this._mq.matches });
+    this._onKey = (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+        if (e.key === 'Escape') e.target.blur();
+        return;
+      }
+      const map = { '1': 'overview', '2': 'people', '3': 'research', '4': 'publications', '5': 'join' };
+      if (map[e.key]) { e.preventDefault(); this.go(map[e.key]); }
+      if (e.key === '/') {
+        e.preventDefault();
+        this.go('publications');
+        setTimeout(() => { const el = document.getElementById('pub-search-input'); if (el) el.focus(); }, 450);
+      }
+    };
+    document.addEventListener('keydown', this._onKey);
+    setTimeout(() => this.setupSpy(), 400);
+    setTimeout(() => this.setupFx(), 450);
+    this._onScroll = () => {
+      if (this._sTick) return; this._sTick = true;
+      requestAnimationFrame(() => {
+        this._sTick = false;
+        const r = document.getElementById('page-scroll'); if (!r) return;
+        const p = Math.max(0, Math.min(1, r.scrollTop / Math.max(1, r.scrollHeight - r.clientHeight)));
+        const q = Math.round(p * 200) / 2;
+        if (q !== this.state.progress) this.setState({ progress: q });
+      });
+    };
+    setTimeout(() => { const r = document.getElementById('page-scroll'); if (r) r.addEventListener('scroll', this._onScroll, { passive: true }); }, 300);
+    const files = ['consts', 'news', 'people', 'research', 'publications', 'join'];
+    Promise.all(files.map(f => fetch('data/' + f + '.json').then(r => r.json()).catch(() => null)))
+      .then(([consts, news, people, research, publications, join]) =>
+        this.setState({ data: { consts, news, people, research, publications, join } }, () => setTimeout(() => this.setupSpy(), 200)));
+  }
+
+  setupSpy() {
+    const root = document.getElementById('page-scroll');
+    if (!root) return;
+    if (this._spy) this._spy.disconnect();
+    this._spy = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) this.setState({ active: en.target.id.replace('sec-', '') }); });
+    }, { root, rootMargin: '-30% 0px -60% 0px' });
+    ['overview', 'people', 'research', 'publications', 'join'].forEach(id => {
+      const el = document.getElementById('sec-' + id);
+      if (el) this._spy.observe(el);
+    });
+  }
+
+  setupFx() {
+    const root = document.getElementById('page-scroll');
+    if (root && !this._revIO) {
+      this._revIO = new IntersectionObserver((es) => {
+        es.forEach(en => {
+          if (en.isIntersecting) {
+            const id = en.target.id.replace('sec-', '');
+            this.setState(s => ({ revealed: { ...s.revealed, [id]: true } }));
+            this._revIO.unobserve(en.target);
+          }
+        });
+      }, { root, threshold: 0.08 });
+      ['news', 'people', 'research', 'publications', 'join'].forEach(id => {
+        const el = document.getElementById('sec-' + id);
+        if (el) this._revIO.observe(el);
+      });
+    }
+    this.setupCanvas();
+  }
+
+  setupCanvas() {
+    const cv = document.getElementById('slam-canvas');
+    if (!cv || this._cvInit) return;
+    this._cvInit = true;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // 3D scaffold mapping: a sparse wireframe world (ground lattice + block
+    // scaffolds) revealed as an agent flies through it. Slow orbiting camera,
+    // perspective projection, keyframe chain + dashed loop closures.
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const edges = [];   // {a:[x,y,z], b:[x,y,z], mid, r: reveal 0..1, g: isGround}
+    const addEdge = (a, b, g) => edges.push({ a, b, mid: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2], r: 0, g: !!g });
+    for (let i = -3; i <= 3; i++) {
+      addEdge([i, 0, -3], [i, 0, 3], true);
+      addEdge([-3, 0, i], [3, 0, i], true);
+    }
+    const cells = [];
+    for (let x = -3; x < 3; x++) for (let z = -3; z < 3; z++) cells.push([x, z]);
+    cells.sort(() => Math.random() - 0.5);
+    cells.slice(0, 9).forEach(([x, z]) => {
+      const hh = [0.6, 1.1, 1.7][Math.floor(Math.random() * 3)];
+      const c = [[x, x + 1], [z, z + 1]];
+      const V = (ix, iy, iz) => [c[0][ix], iy ? hh : 0, c[1][iz]];
+      addEdge(V(0, 1, 0), V(1, 1, 0)); addEdge(V(1, 1, 0), V(1, 1, 1));
+      addEdge(V(1, 1, 1), V(0, 1, 1)); addEdge(V(0, 1, 1), V(0, 1, 0));
+      addEdge(V(0, 0, 0), V(0, 1, 0)); addEdge(V(1, 0, 0), V(1, 1, 0));
+      addEdge(V(1, 0, 1), V(1, 1, 1)); addEdge(V(0, 0, 1), V(0, 1, 1));
+    });
+    const nodes = [], closures = [], trail = [], pings = [];
+    let t = rnd(0, 50), yaw = rnd(0, 6.28), frame = 0, prev = null;
+    const agentPos = (tt) => [
+      2.1 * Math.sin(tt * 0.9) + 0.7 * Math.sin(tt * 1.7 + 1.3),
+      0.55 + 0.4 * Math.sin(tt * 1.1 + 0.5) + 0.4,
+      2.1 * Math.cos(tt * 0.7) + 0.7 * Math.cos(tt * 1.9)
+    ];
+    const step = () => {
+      t += 0.0045; frame++;
+      const p = agentPos(t);
+      prev = trail.length ? trail[trail.length - 1] : p;
+      trail.push(p);
+      if (trail.length > 240) trail.shift();
+      if (frame % 320 === 1) {
+        pings.push({ o: [p[0], p[1], p[2]], rad: 0 });
+        if (pings.length > 2) pings.shift();
+      }
+      for (let i = pings.length - 1; i >= 0; i--) {
+        pings[i].rad += 0.035;
+        if (pings[i].rad > 9.5) pings.splice(i, 1);
+      }
+      edges.forEach(e => {
+        let glow = 0;
+        pings.forEach(pg => {
+          const d = Math.hypot(e.mid[0] - pg.o[0], e.mid[1] - pg.o[1], e.mid[2] - pg.o[2]);
+          const x = d - pg.rad;
+          glow = Math.max(glow, Math.exp(-(x * x) / 0.42));
+        });
+        e.gl = glow;
+        e.seen = Math.max((e.seen || 0) * 0.9995, glow);
+      });
+      if (frame % 26 === 0) {
+        const n = { p };
+        for (let i = 0; i < nodes.length - 8; i++) {
+          const o = nodes[i].p;
+          if (Math.hypot(o[0] - p[0], o[1] - p[1], o[2] - p[2]) < 0.5) { closures.push({ a: nodes[i], b: n, age: 0 }); break; }
+        }
+        nodes.push(n);
+        if (nodes.length > 40) {
+          const dead = nodes.shift();
+          for (let i = closures.length - 1; i >= 0; i--) if (closures[i].a === dead || closures[i].b === dead) closures.splice(i, 1);
+        }
+        if (closures.length > 5) closures.shift();
+      }
+    };
+    const draw = () => {
+      const el = document.getElementById('slam-canvas');
+      if (!el || !el.parentElement) return;
+      const w = el.parentElement.clientWidth, h = el.parentElement.clientHeight;
+      if (!w || !h) return;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      if (el.width !== Math.round(w * dpr)) { el.width = Math.round(w * dpr); el.height = Math.round(h * dpr); }
+      const ctx = el.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      step();
+      yaw += 0.0005;
+      const cy = Math.cos(yaw), sy = Math.sin(yaw);
+      const pitch = -0.46, cxp = Math.cos(pitch), sxp = Math.sin(pitch);
+      const D = 8.2, s = Math.min(w, h) * 1.05, cx = w / 2, cyy = h * 0.58;
+      const proj = (p) => {
+        const px = p[0] * cy - p[2] * sy, pz0 = p[0] * sy + p[2] * cy, py = p[1];
+        const py2 = py * cxp - pz0 * sxp, pz = py * sxp + pz0 * cxp + D;
+        return [cx + (px * s) / pz, cyy - (py2 * s) / pz, pz];
+      };
+      const depth = (z) => Math.max(0.35, Math.min(1, 1.9 - z / D));
+      edges.forEach(e => {
+        const seen = e.seen || 0, gl = e.gl || 0;
+        if (seen < 0.02 && gl < 0.02) return;
+        const A = proj(e.a), B = proj(e.b);
+        const df = depth((A[2] + B[2]) / 2);
+        const base = e.g ? 0.15 : 0.28;
+        ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]);
+        ctx.strokeStyle = 'rgba(28,40,50,' + (base * seen * df).toFixed(3) + ')';
+        ctx.lineWidth = e.g ? 1 : 1.1;
+        ctx.stroke();
+        if (gl > 0.04) {
+          ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]);
+          ctx.strokeStyle = 'rgba(47,98,125,' + (0.26 * gl * df).toFixed(3) + ')';
+          ctx.lineWidth = 1.1;
+          ctx.stroke();
+        }
+      });
+      pings.forEach(pg => {
+        const a = Math.max(0, 0.13 * (1 - pg.rad / 9.5));
+        if (a <= 0.01) return;
+        ctx.beginPath();
+        for (let i = 0; i <= 48; i++) {
+          const th = (i / 48) * 6.2832;
+          const P = proj([pg.o[0] + pg.rad * Math.cos(th), 0, pg.o[2] + pg.rad * Math.sin(th)]);
+          i ? ctx.lineTo(P[0], P[1]) : ctx.moveTo(P[0], P[1]);
+        }
+        ctx.strokeStyle = 'rgba(47,98,125,' + a.toFixed(3) + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+      if (trail.length > 1) {
+        ctx.beginPath();
+        trail.forEach((p, i) => { const P = proj(p); i ? ctx.lineTo(P[0], P[1]) : ctx.moveTo(P[0], P[1]); });
+        ctx.strokeStyle = 'rgba(47,98,125,0.22)'; ctx.lineWidth = 1; ctx.stroke();
+      }
+      closures.forEach(c => {
+        c.age++;
+        const a = Math.max(0, 0.45 - c.age / 600);
+        if (a <= 0) return;
+        const A = proj(c.a.p), B = proj(c.b.p);
+        ctx.beginPath(); ctx.setLineDash([3, 4]);
+        ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]);
+        ctx.strokeStyle = 'rgba(47,98,125,' + a.toFixed(3) + ')'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.setLineDash([]);
+      });
+      nodes.forEach((n, i) => {
+        const P = proj(n.p);
+        const key = i % 5 === 0;
+        const sz = (key ? 4 : 2.4) * depth(P[2]);
+        ctx.fillStyle = key ? 'rgba(47,98,125,0.6)' : 'rgba(28,40,50,0.35)';
+        ctx.fillRect(P[0] - sz / 2, P[1] - sz / 2, sz, sz);
+      });
+      const p = trail[trail.length - 1];
+      if (p) {
+        const P = proj(p), Pv = proj(prev || p);
+        const dx = P[0] - Pv[0], dy = P[1] - Pv[1];
+        const dl = Math.hypot(dx, dy) || 1;
+        ctx.fillStyle = 'rgba(47,98,125,0.7)';
+        ctx.fillRect(P[0] - 2, P[1] - 2, 4, 4);
+        ctx.beginPath(); ctx.moveTo(P[0], P[1]); ctx.lineTo(P[0] + (dx / dl) * 10, P[1] + (dy / dl) * 10);
+        ctx.strokeStyle = 'rgba(47,98,125,0.4)'; ctx.lineWidth = 1.2; ctx.stroke();
+      }
+    };
+    if (reduced) {
+      for (let i = 0; i < 2200; i++) step();
+      draw();
+      return;
+    }
+    this._cvVisible = true;
+    const loop = () => {
+      if (this._stopCv) return;
+      if (this._cvVisible) draw();
+      this._cvRaf = requestAnimationFrame(loop);
+    };
+    loop();
+    this._cvIO = new IntersectionObserver(es => es.forEach(e => { this._cvVisible = e.isIntersecting; }));
+    this._cvIO.observe(cv);
+  }
+
+  componentWillUnmount() {
+    this._stopCv = true;
+    if (this._cvRaf) cancelAnimationFrame(this._cvRaf);
+    if (this._revIO) this._revIO.disconnect();
+    if (this._cvIO) this._cvIO.disconnect();
+    const r = document.getElementById('page-scroll');
+    if (r && this._onScroll) r.removeEventListener('scroll', this._onScroll);
+    document.removeEventListener('keydown', this._onKey);
+    if (this._mq && this._mq.removeEventListener) this._mq.removeEventListener('change', this._onMq);
+    if (this._spy) this._spy.disconnect();
+  }
+
+  go(id) {
+    this.setState({ menu: false, active: id });
+    const root = document.getElementById('page-scroll');
+    const el = document.getElementById('sec-' + id);
+    if (root && el) root.scrollTo({ top: id === 'overview' ? 0 : el.offsetTop - 60, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const S = this.state;
+    const d = S.data || {};
+    const consts = d.consts || {};
+    const group = consts.group || {};
+    const parent = consts.parent || {};
+    const groupName = group.name || 'Edge Intelligence and Robotics Lab';
+    const groupLocation = group.location || '[City, Country]';
+    const parentName = parent.name || '[Parent Research Group Placeholder]';
+    const parentPi = parent.pi || '[Parent PI Name Placeholder]';
+    // Hero paragraphs come from consts.group.description. A {token} is replaced
+    // with a value that already lives in JSON; [text](url) becomes an inline
+    // link. An unknown token is left as-is so a typo shows up rather than
+    // silently swallowing words.
+    const address = Array.isArray(group.address) ? group.address.filter(Boolean) : (group.address ? [group.address] : []);
+    const tokens = { group: groupName, location: groupLocation, affiliation: address[0] || '' };
+    if (parent.name) tokens.parent = parent.name;
+    if (parent.pi) tokens.pi = parent.pi;
+    const linkParts = (s) => {
+      const re = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+      const out = [];
+      let last = 0, m;
+      while ((m = re.exec(s))) {
+        if (m.index > last) out.push({ text: s.slice(last, m.index), url: '' });
+        out.push({ text: m[1], url: m[2] });
+        last = m.index + m[0].length;
+      }
+      if (last < s.length) out.push({ text: s.slice(last), url: '' });
+      return out;
+    };
+    const descSrc = Array.isArray(group.description) ? group.description : (group.description ? [group.description] : []);
+    const description = descSrc
+      .map(p => String(p).replace(/\{(\w+)\}/g, (m, k) => (tokens[k] !== undefined ? tokens[k] : m)))
+      .filter(p => p.trim())
+      .map((text, i, arr) => ({ parts: linkParts(text), margin: i === arr.length - 1 ? '0' : '0 0 0.8em' }));
+    const accent = 'oklch(0.45 0.10 215)';
+    const defs = [['overview', 'Overview'], ['people', 'People'], ['research', 'Research'], ['publications', 'Publications'], ['join', 'Join Us']];
+    const navItems = defs.map(([id, label], i) => {
+      const active = S.active === id;
+      return {
+        id, label, num: '0' + (i + 1),
+        color: active ? '#1c2126' : '#5a636c',
+        numColor: active ? accent : '#a8afb6',
+        underline: active ? accent : 'transparent',
+        go: (e) => { e.preventDefault(); this.go(id); }
+      };
+    });
+    const pad2 = (n) => String(n).padStart(2, '0');
+    const newsLimit = this.props.newsLimit ?? 5;
+    const news = (d.news || []).slice(0, newsLimit);
+    const research = d.research || [];
+    const pq = S.projQuery.trim().toLowerCase();
+    const videoExt = /\.(mp4|webm|ogv|mov|m4v)(\?|#|$)/i;
+    const stillOnly = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const projects = research
+      .filter(p => !pq || (p.title + ' ' + p.description + ' ' + (p.tags || []).join(' ')).toLowerCase().includes(pq))
+      .map(p => {
+        const media = (p.media || '').trim();
+        const isVideo = !!media && videoExt.test(media);
+        return {
+          ...p,
+          media,
+          isVideo,
+          isImage: !!media && !isVideo,
+          autoPlay: isVideo && !stillOnly,
+          poster: p.poster || undefined,
+          statusColor: p.status === 'Active' ? 'oklch(0.5 0.12 150)' : '#8a929a',
+        };
+      });
+    const showAlumni = this.props.showAlumni ?? true;
+    const peopleGroups = ((d.people && d.people.groups) || []).filter(g => showAlumni || g.label !== 'Alumni');
+    const peopleTotal = peopleGroups.reduce((a, g) => a + g.members.length, 0);
+    const bq = S.pubQuery.trim().toLowerCase();
+    const pubsAll = (d.publications || []).slice().sort((a, b) => b.year - a.year);
+    const pubs = pubsAll
+      .filter(p => !bq || (p.title + ' ' + p.authors + ' ' + p.venue + ' ' + p.year).toLowerCase().includes(bq))
+      .map((p, i) => {
+        const url = (p.url || '').trim();
+        return { ...p, url, hasUrl: !!url, ref: '[' + (i + 1) + ']' };
+      });
+    const join = d.join || {};
+    // One address does all the work. "admissions" wins if it is set, so a lab
+    // that splits the two keeps the applications one here; otherwise the
+    // general address is what applicants get.
+    const emails = consts.emails || {};
+    const contactEmail = String(emails.admissions || emails.general || '').trim();
+    const applySubject = join.subject || 'Application';
+    const mailtoUrl = contactEmail
+      ? 'mailto:' + encodeURIComponent(contactEmail).replace(/%40/g, '@') + '?subject=' + encodeURIComponent(applySubject)
+      : '#';
+    const rv = (id) => (S.revealed[id] ? { o: 1, y: '0px' } : { o: 0, y: '26px' });
+    return {
+      isMobile: S.isMobile,
+      notMobile: !S.isMobile,
+      menuOpen: S.isMobile && S.menu,
+      menuLabel: S.menu ? 'Close' : 'Menu',
+      toggleMenu: () => this.setState(s => ({ menu: !s.menu })),
+      navItems,
+      goTop: (e) => { e.preventDefault(); this.go('overview'); },
+      goJoin: (e) => { e.preventDefault(); this.go('join'); },
+      groupName,
+      tagline: group.tagline || 'SLAM · Navigation · FPGA Acceleration · Neuromorphic Computing',
+      address,
+      groupLocation,
+      contactEmail,
+      hasEmail: !!contactEmail,
+      mailtoUrl,
+      applySubject,
+      socials: consts.socialLinks || [],
+      recruiting: this.props.recruitingBadge ?? true,
+      description,
+      heroTags: group.tags || [],
+      news,
+      peopleGroups,
+      peopleIntro: (d.people && d.people.intro) || '',
+      peopleCount: pad2(peopleTotal),
+      projects,
+      projQuery: S.projQuery,
+      onProjSearch: (e) => this.setState({ projQuery: e.target.value }),
+      projCountLabel: pad2(projects.length) + ' / ' + pad2(research.length),
+      pubs,
+      pubQuery: S.pubQuery,
+      onPubSearch: (e) => this.setState({ pubQuery: e.target.value }),
+      pubCountLabel: pad2(pubs.length) + ' / ' + pad2(pubsAll.length),
+      pubCols: S.isMobile ? '1fr' : '52px 1fr',
+      rowCols: S.isMobile ? '1fr' : '96px 1fr',
+      rowGap: S.isMobile ? '4px' : '18px',
+      hasParent: !!parent.name,
+      parentName,
+      parentUrl: parent.url || '#',
+      parentPi,
+      progressW: S.progress + '%',
+      revNews: rv('news'), revPeople: rv('people'), revResearch: rv('research'), revPubs: rv('publications'), revJoin: rv('join'),
+      hasInternal: !!(consts.internal && consts.internal.url),
+      internalUrl: (consts.internal || {}).url || '#',
+      internalLabel: (consts.internal || {}).label || 'Internal',
+      // An opening with "open": false stays listed but greys out. "about" is the
+      // longer blurb revealed on hover; it falls back to the card's own text so
+      // the overlay is never blank.
+      openings: (join.openings || []).map(o => ({
+        ...o,
+        cls: o.open === false ? 'opening opening-closed' : 'opening',
+        whenColor: o.open === false ? '#8a929a' : accent,
+        about: o.about || o.details || ''
+      })),
+      joinIntro: join.intro || '',
+      howToApply: join.howToApply || '',
+      joinNote: join.note || ''
+    };
+  }
+}
+</script>
+</body>
+
+</html>

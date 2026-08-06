@@ -1,0 +1,29 @@
+{
+  "intro": "We are always looking for motivated people who want to build spatial AI systems that run in the real world, in real time.",
+  "openings": [
+    {
+      "role": "PhD Students",
+      "open": false,
+      "when": "Closed",
+      "details": "Fully-funded positions in relevant areas are available. Strong hands-on experience in robotics, embedded systems, etc. preferred.",
+      "about": "Please refer to NTU's website for the relevant application procedures. https://www.ntu.edu.sg/admissions/graduate/radmissionguide"
+    },
+    {
+      "role": "Undergraduates",
+      "open": true,
+      "when": "Subj. to review",
+      "details": "NTU FYP/URECA applicants welcome to write in. Prior hands-on experience preferred, research/publication experience not mandated.",
+      "about": "Generally, project durations will follow typical administrative requirements (i.e. 2 semesters). If you have a specific topic or area of interest, or want mentorship from a particular member, please specify that in your email."
+    },
+    {
+      "role": "Interns (Remote)",
+      "open": false,
+      "when": "Closed",
+      "details": "",
+      "about": ""
+    }
+  ],
+  "howToApply": "Email your CV, transcripts, and a short statement of interest to the address below, with the subject line shown beside it. Applications are reviewed on a rolling basis.",
+  "subject": "EIAS Application",
+  "note": "We especially welcome applicants with hands-on robotics or embedded systems experience."
+}

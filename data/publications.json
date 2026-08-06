@@ -1,0 +1,50 @@
+[
+  {
+    "authors": "Edward Beng Wai Tan and Siew Kei Lam",
+    "title": "Learning to Navigate Efficiently with Only 0.58M Trainable Parameters",
+    "venue": "Under review",
+    "year": 2026,
+    "type": "Preprint",
+    "url": "https://arxiv.org/abs/2607.11029"
+  },
+  {
+    "authors": "Edward Beng Wai Tan, Siew Kei Lam and Dongshuo Zhang",
+    "title": "Spectral GS-SLAM: Observability-Aware, Degeneracy-Robust Tracking for Real-Time 3D Gaussian Splatting SLAM",
+    "venue": "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)",
+    "year": 2026,
+    "type": "Conference",
+    "url": "https://edward62740.github.io/spectralgsslam"
+  },
+  {
+    "authors": "Miyuru Thathsara, Damith Anhettigama, Siew-Kei Lam",
+    "title": "FPGA Stereo Visual Slam with Efficient Stereo Feature Matching and Key-Frame Generation",
+    "venue": "International Conference on Field-Programmable Logic and Applications (FPL)",
+    "year": 2025,
+    "type": "Conference",
+    "url": ""
+  },
+  {
+    "authors": "Miyuru Thathsara, Siew-Kei Lam, Damith Kawshan, Duvindu Piyasena",
+    "title": "Hardware accelerator for feature matching with binary search tree",
+    "venue": "IEEE International Symposium on Circuits and Systems (ISCAS)",
+    "year": 2024,
+    "type": "Conference",
+    "url": ""
+  },
+  {
+    "authors": "Miyuru Thathsara, Damith Anhettigama, Siew-Kei Lam, Duvindu Piyasena",
+    "title": "Hardware-Efficient Homogenized Key-Point Selection for Visual SLAM",
+    "venue": "International Conference on Field Programmable Technology (ICFPT)",
+    "year": 2024,
+    "type": "Conference",
+    "url": ""
+  },
+  {
+    "authors": "Duvindu Piyasena, Miyuru Thathsara, Sathursan Kanagarajah, Siew Kei Lam, Meiqing Wu",
+    "title": "Dynamically growing neural network architecture for lifelong deep learning on the edge",
+    "venue": "International Conference on Field-Programmable Logic and Applications (FPL)",
+    "year": 2020,
+    "type": "Conference",
+    "url": ""
+  }
+]

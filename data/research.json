@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Spectral GS-SLAM: Observability-Aware, Degeneracy-Robust Tracking for Real-Time 3D Gaussian Splatting SLAM",
+    "description": "Robust 3D Gaussian Splatting SLAM for survival in feature- and geometrically-degenerate environments.",
+    "tags": [
+      "SLAM",
+      "ICP",
+      "Robustness",
+      "3D Gaussian Splatting"
+    ],
+    "status": "Paper and code available",
+    "featured": true,
+    "media": "assets/research/spectralgs/spectralgs.gif",
+    "poster": "",
+    "link": "https://edward62740.github.io/spectralgsslam/"
+  },
+  {
+    "title": "Stereo Visual SLAM on FPGA",
+    "description": "Feature extraction and stereo feature matching is accelerated in the FPGA fabric, while the remaining pipeline runs on the ARM quad-core processing system (PS) of a Xilinx Zynq UltraScale+ MPSoC (ZCU102)",
+    "tags": [
+      "SLAM",
+      "FPGA",
+      "Efficient",
+      "Visual Localization"
+    ],
+    "status": "Paper available",
+    "featured": true,
+    "media": "assets/research/stereo-slam/stereo-slam.gif",
+    "poster": "",
+    "link": "https://www.youtube.com/watch?v=vtGebB7Yoc8"
+  },
+  {
+    "title": "Learning to Navigate Efficiently with Only 0.58M Trainable Parameters",
+    "description": "Decomposed visual navigation policy with 0.58M parameters.",
+    "tags": [
+      "Visual Navigation",
+      "Path Planning",
+      "Diffusion",
+      "Embedded"
+    ],
+    "status": "Paper available",
+    "featured": true,
+    "media": "assets/research/0.58m-nav/0.58m-nav.gif",
+    "poster": "",
+    "link": "#"
+  }
+]

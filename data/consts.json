@@ -1,0 +1,39 @@
+{
+  "group": {
+    "short": "eias-lab",
+    "name": "Edge Intelligence for Autonomous Systems Lab",
+    "tagline": "Efficient Computing · Robotics",
+    "address": [
+      "College of Computing and Data Science",
+      "Nanyang Technological University",
+      "Blk N4, B2b-05",
+      "50 Nanyang Avenue",
+      "Singapore 639798"
+    ],
+    "location": "Singapore",
+    "description": [
+      "We build spatial edge intelligence for robots that have to perceive, map, and navigate in real time, while remaining robust and computationally lightweight.",
+      "Our lab is part of [EI Research Group](https://siewkeilam.github.io/ei-research-group), and we are located at the College of Computing and Data Science ([CCDS](https://www.ntu.edu.sg/computing)), NTU, Singapore."
+    ],
+    "tags": [
+      "Robotics",
+      "Visual SLAM",
+      "Hardware Acceleration",
+      "Autonomous Navigation",
+      "Power Efficient Autonomy"
+    ]
+  },
+  "emails": {
+    "general": "siewkei_lam@pmail.ntu.edu.sg"
+  },
+  "socialLinks": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/NTU-EIAS-Lab"
+    }
+  ],
+  "internal": {
+    "label": "Internal",
+    "url": "#"
+  }
+}

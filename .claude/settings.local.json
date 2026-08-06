@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($p = Get-Content -Raw 'data\\\\people.json' | ConvertFrom-Json; $p.groups | ForEach-Object { $_.members } | ForEach-Object { \"$\\($_.name\\) | photo='$\\($_.photo\\)'\" })"
+    ]
+  }
+}
