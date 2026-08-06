@@ -249,7 +249,7 @@
             style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0.55;"></canvas>
           <div style="position:relative;">
             <sc-if value="{{ hasParent }}">
-              <a href="{{ parentUrl }}"
+              <a href="{{ parentUrl }}" target="_blank" rel="noopener noreferrer"
                 style="display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:0.64rem; letter-spacing:0.12em; text-transform:uppercase; color:#5a636c; text-decoration:none; margin-bottom:16px;"
                 style-hover="color:oklch(0.42 0.10 215);"><span style="color:oklch(0.45 0.10 215);">↳</span>Part of {{
                 parentName }}</a>
@@ -272,7 +272,7 @@
             <div style="font-size:clamp(0.95rem, 1.4vw, 1.05rem); line-height:1.7; color:#39424b; max-width:62ch;">
               <sc-for list="{{ description }}" as="para" hint-placeholder-count="2">
                 <!-- Segments stay on one line: a newline between inline nodes would render as a stray space. -->
-                <p style="margin: {{ para.margin }};"><sc-for list="{{ para.parts }}" as="part" hint-placeholder-count="1"><sc-if value="{{ part.url }}"><a href="{{ part.url }}" style="text-decoration:none; border-bottom:1px solid oklch(0.45 0.10 215 / 0.35);">{{ part.text }}</a></sc-if><sc-if value="{{ !part.url }}"><span>{{ part.text }}</span></sc-if></sc-for></p>
+                <p style="margin: {{ para.margin }};"><sc-for list="{{ para.parts }}" as="part" hint-placeholder-count="1"><sc-if value="{{ part.url }}"><a href="{{ part.url }}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; border-bottom:1px solid oklch(0.45 0.10 215 / 0.35);">{{ part.text }}</a></sc-if><sc-if value="{{ !part.url }}"><span>{{ part.text }}</span></sc-if></sc-for></p>
               </sc-for>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:26px;">
@@ -284,7 +284,7 @@
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:26px;">
               <sc-for list="{{ socials }}" as="s" hint-placeholder-count="4">
-                <a href="{{ s.url }}"
+                <a href="{{ s.url }}" target="_blank" rel="noopener noreferrer"
                   style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:#5a636c; text-decoration:none; border-bottom:1px solid rgba(28,40,50,0.2); padding-bottom:2px; transition:color 0.2s, border-color 0.2s;"
                   style-hover="color:oklch(0.42 0.10 215); border-color:oklch(0.45 0.10 215 / 0.6);">{{ s.label }} ↗</a>
               </sc-for>
@@ -335,7 +335,7 @@
             <div
               style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap:12px;">
               <sc-for list="{{ g.members }}" as="m" hint-placeholder-count="2">
-                <a href="{{ m.link }}"
+                <a href="{{ m.link }}" target="_blank" rel="noopener noreferrer"
                   style="display:flex; gap:13px; align-items:center; background:#ffffff; border:1px solid rgba(28,40,50,0.12); padding:14px 15px; text-decoration:none; color:inherit; transition:border-color 0.25s, box-shadow 0.25s;"
                   style-hover="border-color:#1c2126; box-shadow:3px 3px 0 rgba(28,40,50,0.12);">
                   <sc-if value="{{ m.photo }}">
@@ -392,7 +392,7 @@
           </div>
           <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap:14px;">
             <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
-              <a href="{{ p.link }}"
+              <a href="{{ p.link }}" target="_blank" rel="noopener noreferrer"
                 style="display:flex; flex-direction:column; background:#ffffff; border:1px solid rgba(28,40,50,0.12); text-decoration:none; color:inherit; transition:border-color 0.25s, box-shadow 0.25s;"
                 style-hover="border-color:#1c2126; box-shadow:4px 4px 0 rgba(28,40,50,0.12);">
                 <div
@@ -573,7 +573,7 @@
             </span>
           </span>
           <sc-if value="{{ hasInternal }}" hint-placeholder-val="{{ true }}">
-            <a href="{{ internalUrl }}"
+            <a href="{{ internalUrl }}" target="_blank" rel="noopener noreferrer"
               style="display:inline-flex; align-items:center; gap:7px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:oklch(0.42 0.10 215); text-decoration:none; border:1px solid oklch(0.45 0.10 215 / 0.4); background:#ffffff; padding:7px 13px; transition:background 0.2s, border-color 0.2s;"
               style-hover="background:oklch(0.45 0.10 215 / 0.07); border-color:oklch(0.45 0.10 215 / 0.7);">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
