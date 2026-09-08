@@ -18,7 +18,7 @@ Leave `photo` as `""` (or omit it) and the card falls back to the hatched
 
 Conventions:
 
-- Square source image, ideally 200×200 or larger — the card renders it at 46×46
+- Square source image, ideally 200×200 or larger — the card renders it at 52×52
   with `object-fit: cover` and `object-position: center top`, so a non-square
   image is cropped from the top edge.
 - Lowercase kebab-case filename matching the person's name.
